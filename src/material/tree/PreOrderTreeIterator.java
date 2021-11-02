@@ -3,35 +3,38 @@ package material.tree;
 
 import material.Position;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author jvelez
- * @param <T>
+ * @param <E>
  */
-public class PreOrderTreeIterator<T> implements Iterator<Position<T>> {
+public class PreOrderTreeIterator<E> implements Iterator<Position<E>> {
 
-    
+    List<Position<E>> list = new LinkedList<>();
+    Tree<E> tree;
 
-    public PreOrderTreeIterator(Tree<T> tree) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public PreOrderTreeIterator(Tree<E> tree){
+        this(tree, tree.root());
     }
-
-    public PreOrderTreeIterator(Tree<T> tree, Position<T> root) {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public PreOrderTreeIterator(Tree<E> tree, Position<E> root){
+        this.tree= tree;
+        if(root!=null) list.add(root);
     }
 
     @Override
     public boolean hasNext() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !list.isEmpty();
     }
 
-    /**
-     * This method visits the nodes of a tree by following a pre-order
-     */
     @Override
-    public Position<T> next() {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Position<E> next() {
+        Position<E> first = list.remove(0);
+        for(Position<E> position : tree.children(first)){
+            list.add(position);
+        }
+        return first;
     }
-
 }
