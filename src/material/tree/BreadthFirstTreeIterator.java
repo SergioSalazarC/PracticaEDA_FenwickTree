@@ -2,6 +2,9 @@
 package material.tree;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 import material.Position;
 
 /**
@@ -11,17 +14,22 @@ import material.Position;
  */
 public class BreadthFirstTreeIterator<T> implements Iterator<Position<T>> {
 
-        
-    public BreadthFirstTreeIterator(Tree<T> tree, Position<T> root) {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    LinkedList<Position<T>> cola = new LinkedList<>();
+    Tree<T> tree;
+
+    public BreadthFirstTreeIterator(Tree<T> tree, Position<T> root){
+        this.tree=tree;
+        if(root!=null) cola.add(root);
     }
-    public BreadthFirstTreeIterator(Tree<T> tree) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public BreadthFirstTreeIterator(Tree<T> tree){
+        this(tree,tree.root());
     }
+
     
     @Override
     public boolean hasNext() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !cola.isEmpty();
     }
 
     /**
@@ -29,7 +37,12 @@ public class BreadthFirstTreeIterator<T> implements Iterator<Position<T>> {
      */
     @Override
     public Position<T> next() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Position<T> pos = cola.removeLast();
+        for (Position<T> child: tree.children(pos)){
+            cola.addFirst(child);
+        }
+        return pos;
+
     }
 
    

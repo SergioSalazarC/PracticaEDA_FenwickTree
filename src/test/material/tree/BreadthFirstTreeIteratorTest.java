@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
  */
-package material.tree;
+package test.material.tree;
 
 import material.Position;
+import material.tree.BreadthFirstTreeIterator;
 import material.tree.narytree.LinkedTree;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -37,7 +38,7 @@ public class BreadthFirstTreeIteratorTest {
         Position<String> j = t.add("J", f);
 
         String salida = "";
-        BreadthFirstTreeIterator <String> it = new BreadthFirstTreeIterator<>(t);
+        BreadthFirstTreeIterator<String> it = new BreadthFirstTreeIterator<>(t);
         while (it.hasNext()) {
             salida += it.next().getElement();
         }

@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
  */
-package material.tree;
+package test.material.tree;
 
 import material.Position;
+import material.tree.PosOrderTreeIterator;
 import material.tree.narytree.LinkedTree;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -13,13 +14,13 @@ import static org.junit.Assert.*;
  *
  * @author mayte
  */
-public class PreOrderTreeIteratorTest {
+public class PosOrderTreeIteratorTest {
     
-    public PreOrderTreeIteratorTest() {
+    public PosOrderTreeIteratorTest() {
     }
 
     /**
-     * Test of hasNext method, of class PreOrderTreeIterator.
+     * Test of hasNext method, of class PosOrderTreeIterator.
      */
     @Test
     public void testIterator() {
@@ -37,10 +38,12 @@ public class PreOrderTreeIteratorTest {
         Position<String> j = t.add("J", f);
 
         String salida = "";
-        PreOrderTreeIterator <String> it = new PreOrderTreeIterator<>(t);
+        PosOrderTreeIterator<String> it = new PosOrderTreeIterator<>(t);
         while (it.hasNext()) {
             salida += it.next().getElement();
         }
-        assertEquals("ABCEFIJGDH",salida);
+        assertEquals("BEIJFGCHDA",salida);
     }
+
+
 }

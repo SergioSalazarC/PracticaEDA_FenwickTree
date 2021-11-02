@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
  */
-package material.tree;
+package test.material.tree.binarytree;
 
 import material.Position;
+import material.tree.binarytree.InorderBinaryTreeIterator;
 import material.tree.binarytree.LinkedBinaryTree;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -13,13 +14,13 @@ import static org.junit.Assert.*;
  *
  * @author mayte
  */
-public class LeafIteratorTest {
+public class InorderBinaryTreeIteratorTest {
     
-    public LeafIteratorTest() {
+    public InorderBinaryTreeIteratorTest() {
     }
 
     /**
-     * Test of hasNext method, of class LeafIterator.
+     * Test of hasNext method, of class InorderBinaryTreeIterator.
      */
     @Test
     public void testIterator() {
@@ -35,12 +36,13 @@ public class LeafIteratorTest {
         Position<Integer> h = t.insertLeft(f,5);
         Position<Integer> i = t.insertRight(f,7);
         
-         String salida = "";
-        LeafIterator <Integer> it = new LeafIterator<>(t);
+
+        String salida = "";
+        InorderBinaryTreeIterator<Integer> it = new InorderBinaryTreeIterator<>(t);
         while (it.hasNext()) {
             salida += it.next().getElement().toString();
         }
-        assertEquals("13579",salida);
+        assertEquals("123456789",salida);
     }
-
+ 
 }
