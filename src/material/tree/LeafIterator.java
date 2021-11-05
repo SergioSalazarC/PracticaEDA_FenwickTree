@@ -2,6 +2,8 @@
 package material.tree;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+
 import material.Position;
 
 /**
@@ -10,28 +12,46 @@ import material.Position;
  * @param <T>
  */
 public class LeafIterator<T> implements Iterator<Position<T>>  {
+
+    LinkedList<Position<T>> lista = new LinkedList<>();
+    LinkedList<Position<T>> aux = new LinkedList<>();
+    Tree<T> tree;
     
     
 
     public LeafIterator(Tree<T> tree, Position<T> root){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.tree=tree;
+        if(root!=null) aux.add(root);
     }
     
     public LeafIterator(Tree<T> tree){
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this(tree,tree.root());
     }
     
     @Override
     public boolean hasNext() {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !lista.isEmpty() || !aux.isEmpty();
     }
 
     /**
      * This method only visits the leaf nodes 
      */
+
     @Override
     public Position<T> next() {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        while(lista.isEmpty() && !aux.isEmpty()){
+            Position<T> pos = aux.removeFirst();
+
+            for (Position<T> child: tree.children(pos)){
+                if(tree.isLeaf(child)){
+                    lista.addLast(child);
+                }else{
+                    aux.addFirst(child);
+                }
+            }
+        }
+        Position<T> leaf = lista.removeLast();
+        return leaf;
     }
 
     

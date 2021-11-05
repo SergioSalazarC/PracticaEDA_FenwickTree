@@ -36,7 +36,7 @@ public class LeafIteratorTest {
         Position<Integer> h = t.insertLeft(f,5);
         Position<Integer> i = t.insertRight(f,7);
         
-         String salida = "";
+        String salida = "";
         LeafIterator<Integer> it = new LeafIterator<>(t);
         while (it.hasNext()) {
             salida += it.next().getElement().toString();
