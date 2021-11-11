@@ -18,6 +18,18 @@ public class FendTreeTest {
     public FendTreeTest() {
     }
 
+    @Test
+    public void testConstructor(){
+        System.out.println("Constructor");
+        int[] array = {2,1,1,3,2,3,4,5,6,7,8,9};
+        FendTree instance = new FendTree(array);
+
+        int[] sol = {0,2,3,1,7,2,5,4,21,6,13,8,30};
+        for(int i=0;i<sol.length;i++){
+            assertEquals(sol[i],instance.getNum(i));
+        }
+    }
+
     /**
      * Test of getSum method, of class FendTree.
      */

@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import material.Position;
 import material.tree.MoreFunctionality;
+import material.tree.narytree.InvalidPositionException;
 import material.tree.narytree.LinkedTree;
 import material.tree.narytree.NAryTree;
 import org.junit.Test;
@@ -47,7 +48,7 @@ public class MoreFunctionalityTest {
      * Test of leftView method, of class MoreFunctionality.
      */
     @Test
-    public void testLeftView() {
+    public void testLeftView() throws InvalidPositionException {
         System.out.println("leftView");
         MoreFunctionality<Character> instance = new MoreFunctionality<Character>();
         try{
@@ -67,7 +68,7 @@ public class MoreFunctionalityTest {
      * Test of rightView method, of class MoreFunctionality.
      */
     @Test
-    public void testRightView() {
+    public void testRightView() throws InvalidPositionException {
         System.out.println("rightView");
         MoreFunctionality<Character> instance = new MoreFunctionality<>();
         try{
