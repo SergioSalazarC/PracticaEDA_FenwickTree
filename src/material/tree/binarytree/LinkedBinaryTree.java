@@ -272,10 +272,10 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
     @Override
     public Iterable<? extends Position<T>> children(Position<T> v) {
         LinkedList<Position<T>> aux= new LinkedList<>();
-        if(this.right(v)!=null)
-            aux.add(this.right(v));
         if(this.left(v)!=null)
             aux.add(this.left(v));
+        if(this.right(v)!=null)
+            aux.add(this.right(v));
 
         return aux;
     }

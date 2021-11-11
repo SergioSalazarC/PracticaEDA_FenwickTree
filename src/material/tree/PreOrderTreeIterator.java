@@ -32,8 +32,12 @@ public class PreOrderTreeIterator<E> implements Iterator<Position<E>> {
     @Override
     public Position<E> next() {
         Position<E> first = list.remove(0);
+        List<Position<E>> aux = new LinkedList<>();
         for(Position<E> position : tree.children(first)){
-            list.add(position);
+            aux.add(0,position);
+        }
+        for(Position<E> pos:aux){
+            list.add(0,pos);
         }
         return first;
     }

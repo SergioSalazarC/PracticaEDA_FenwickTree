@@ -3,6 +3,7 @@ package material.tree;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import material.Position;
 
@@ -39,18 +40,21 @@ public class LeafIterator<T> implements Iterator<Position<T>>  {
 
     @Override
     public Position<T> next() {
+
         while(lista.isEmpty() && !aux.isEmpty()){
             Position<T> pos = aux.removeFirst();
-
-            for (Position<T> child: tree.children(pos)){
-                if(tree.isLeaf(child)){
-                    lista.addLast(child);
-                }else{
-                    aux.addFirst(child);
-                }
+            if(tree.isLeaf(pos)){
+                lista.addFirst(pos);
+            }
+            LinkedList<Position<T>> auxlist = new LinkedList<>();
+            for(Position<T> position : tree.children(pos)){
+                auxlist.add(0,position);
+            }
+            for (Position<T> child: auxlist){
+                aux.addFirst(child);
             }
         }
-        Position<T> leaf = lista.removeLast();
+        Position<T> leaf = lista.removeFirst();
         return leaf;
     }
 

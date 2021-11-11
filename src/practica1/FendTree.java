@@ -18,13 +18,8 @@ public class FendTree {
 
     public FendTree(int [] array){
       Ftree=new int[array.length+1];
-      for(int i=0; i<array.length+1;i++){
-          if(i==0) continue;
-          int x=i;
-          int y= x-(x & (-x));
-          for(int j=y;j<x;j++){
-              Ftree[x]+=array[j];
-          }
+      for(int i=0; i<array.length;i++){
+          upDate(i,array[i]);
       }
 
 
