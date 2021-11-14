@@ -1,8 +1,12 @@
 
 package material.tree.binarytree;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+
 import material.Position;
+import material.tree.Tree;
 
 /**
  *
@@ -10,20 +14,23 @@ import material.Position;
  * @param <T>
  */
 public class InorderBinaryTreeIterator<T> implements Iterator<Position<T>> {
-
+    LinkedList<Position<T>> lista = new LinkedList<>();
+    HashSet<Position<T>> marcado = new HashSet<>();
+    BinaryTree<T> arbol;
        
     public InorderBinaryTreeIterator(BinaryTree <T> tree) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this(tree,tree.root());
     }
 
     public InorderBinaryTreeIterator(BinaryTree <T> tree, Position<T> node) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        arbol=tree;
+        lista.add(node);
     }
 
          
     @Override
     public boolean hasNext() {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !lista.isEmpty();
     }
 
     /**
@@ -31,7 +38,24 @@ public class InorderBinaryTreeIterator<T> implements Iterator<Position<T>> {
      */
     @Override
     public Position<T> next() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Position<T> pos = lista.removeFirst();
+        while(true){
+            if(marcado.contains(pos)){
+                break;
+            }
+            else{
+                marcado.add(pos);
+                if(arbol.hasRight(pos)){
+                    lista.addFirst(arbol.right(pos));
+                }
+                lista.addFirst(pos);
+                if(arbol.hasLeft(pos)){
+                    lista.addFirst(arbol.left(pos));
+                }
+            }
+            pos=lista.removeFirst();
+        }
+        return pos;
     }
 
     

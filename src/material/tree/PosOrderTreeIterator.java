@@ -1,7 +1,8 @@
 package material.tree;
 
 import material.Position;
-import java.util.Iterator;
+
+import java.util.*;
 
 /**
  *
@@ -10,18 +11,23 @@ import java.util.Iterator;
  */
 public class PosOrderTreeIterator<T> implements Iterator<Position<T>> {
 
+    List<Position<T>> pila = new LinkedList<>();
+    HashSet<Position<T>> conj = new HashSet<>();
+    Tree<T> arbol;
+
        
     public PosOrderTreeIterator(Tree<T> tree) {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this(tree,tree.root());
     }
 
     public PosOrderTreeIterator(Tree<T> tree, Position<T> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        arbol=tree;
+        pila.add(root);
     }
 
     @Override
     public boolean hasNext() {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !pila.isEmpty();
     }
 
     /**
@@ -29,7 +35,23 @@ public class PosOrderTreeIterator<T> implements Iterator<Position<T>> {
      */
     @Override
     public Position<T> next() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Position<T> pos = pila.remove(0);
+        while(true){
+            if(conj.contains(pos)){
+                break;
+            }
+            conj.add(pos);
+            pila.add(0,pos);
+            LinkedList<Position<T>> aux = new LinkedList<>();
+            for(Position<T> p: arbol.children(pos)){
+                aux.addFirst(p);
+            }
+            for(Position<T> p:aux){
+                pila.add(0,p);
+            }
+            pos=pila.remove(0);
+        }
+        return pos;
 
     }
 

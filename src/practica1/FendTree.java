@@ -17,12 +17,10 @@ public class FendTree {
 
 
     public FendTree(int [] array){
-      Ftree=new int[array.length+1];
-      for(int i=0; i<array.length;i++){
-          upDate(i,array[i]);
-      }
-
-
+        Ftree=new int[array.length+1];
+        for(int i=0; i<array.length;i++){
+            upDate(i,array[i]);
+        }
     }
 
     public int getNum(int i){

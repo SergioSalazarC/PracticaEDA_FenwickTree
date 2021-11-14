@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import material.Position;
+import material.tree.BreadthFirstTreeIterator;
+import material.tree.PreOrderTreeIterator;
 import material.tree.narytree.InvalidPositionException;
 import material.tree.narytree.LinkedTree;
 
@@ -69,8 +71,14 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
         }
     }
 
+
+
+
     @Override
     public Position<T> left(Position<T> v) {
+        if(!this.hasLeft(v)){
+            throw new RuntimeException();
+        }
         BinaryTreeNode k = null;
         try {
              k = checkPosition(v);
@@ -83,6 +91,9 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 
     @Override
     public Position<T> right(Position<T> v) {
+        if(!this.hasRight(v)){
+            throw new RuntimeException();
+        }
         BinaryTreeNode k = null;
         try {
             k = checkPosition(v).getRight();
@@ -153,12 +164,27 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 
     @Override
     public T replace(Position<T> p, T e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        try {
+            BinaryTreeNode<T> nodo = checkPosition(p);
+            nodo.setElement(e);
+        } catch (InvalidPositionException ex) {
+            ex.printStackTrace();
+        }
+        return e;
     }
 
     @Override
     public Position<T> sibling(Position<T> p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Position<T> sib;
+        if(this.isRoot(p)){
+            throw new RuntimeException();
+        }
+        Position<T> par = this.parent(p);
+        if(!this.hasLeft(par) || !this.hasRight(par)) return null;
+        if(this.right(par).equals(p)) sib=this.left(par);
+        else sib=this.right(par);
+        return sib;
     }
 
     @Override
@@ -195,6 +221,9 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 
     @Override
     public T remove(Position<T> p) {
+        if(this.hasLeft(p) && this.hasRight(p)){
+            throw new RuntimeException();
+        }
         BinaryTreeNode<T> nodo=null;
         T elem=null;
         try {
@@ -259,6 +288,7 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 
     @Override
     public Position<T> parent(Position<T> v) {
+        if (this.isRoot(v)) throw new RuntimeException();
         BinaryTreeNode<T> pa = null;
         try {
             BinaryTreeNode<T> node = checkPosition(v);
@@ -282,22 +312,74 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 
     @Override
     public Iterator<Position<T>> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new InorderBinaryTreeIterator<>(this);
     }
 
     @Override
     public void attachLeft(Position<T> h, BinaryTree<T> t1) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.hasLeft(h)){
+            throw new RuntimeException();
+        }
+        else{
+            try {
+                BinaryTreeNode<T> nodo = checkPosition(h);
+                BinaryTreeNode<T> nodoraix = checkPosition(t1.root());
+                nodoraix.setParent(nodo);
+                nodo.setLeft(nodoraix);
+            } catch (InvalidPositionException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void attachRight(Position<T> h, BinaryTree<T> t1) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.hasRight(h)){
+            throw new RuntimeException();
+        }
+        else{
+            try {
+                BinaryTreeNode<T> nodo = checkPosition(h);
+                BinaryTreeNode<T> nodoraix = checkPosition(t1.root());
+                nodoraix.setParent(nodo);
+                nodo.setRight(nodoraix);
+            } catch (InvalidPositionException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public BinaryTree<T> subTree(Position<T> h) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BinaryTreeNode<T> node =null;
+        if(this.isRoot(h)) return this;
+        Position<T> padre = this.parent(h);
+        if (this.hasLeft(padre) && this.left(padre).equals(h)) {
+            try {
+                BinaryTreeNode nodo = checkPosition(padre);
+                nodo.setLeft(null);
+            } catch (InvalidPositionException e) {
+                e.printStackTrace();
+            }
+        }
+        if (this.hasRight(padre) && this.right(padre).equals(h)) {
+            try {
+                BinaryTreeNode nodo = checkPosition(padre);
+                nodo.setRight(null);
+            } catch (InvalidPositionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            node=checkPosition(h);
+        } catch (InvalidPositionException e) {
+            e.printStackTrace();
+        }
+        LinkedBinaryTree<T> arbol = new LinkedBinaryTree<>();
+        arbol.root=node;
+        return arbol;
+
     }
 
     private BinaryTreeNode<T> checkPosition(Position<T> p)throws InvalidPositionException {

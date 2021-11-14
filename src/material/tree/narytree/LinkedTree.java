@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import material.Position;
+import material.tree.BreadthFirstTreeIterator;
 import material.tree.PreOrderTreeIterator;
 
 import javax.swing.tree.TreeNode;
@@ -245,7 +246,7 @@ public class LinkedTree<E> implements NAryTree<E> {
 
     @Override
     public Iterator<Position<E>> iterator() {
-        return new PreOrderTreeIterator<>(this);
+        return new BreadthFirstTreeIterator<>(this);
     }
 
     public int size(){

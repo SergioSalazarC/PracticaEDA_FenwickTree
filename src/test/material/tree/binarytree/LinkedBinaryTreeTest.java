@@ -441,6 +441,7 @@ public class LinkedBinaryTreeTest {
         Position<String> n3 = t.insertLeft(h, "3");
         Position<String> n5 = t.insertRight(h, "5");
         LinkedBinaryTree<String> t2 = (LinkedBinaryTree<String>) t.subTree(h);
+        Position<String> a =  t2.root();
         assertEquals(t2.root(), h);
         assertEquals(t2.left(t2.root()), n3);
         assertEquals(t2.right(t2.root()), n5);
