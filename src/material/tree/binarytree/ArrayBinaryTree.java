@@ -4,8 +4,10 @@ package material.tree.binarytree;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import material.Position;
+import material.tree.BreadthFirstTreeIterator;
 import material.tree.narytree.InvalidPositionException;
 
 /**
@@ -103,7 +105,14 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
         } catch (InvalidPositionException e) {
             e.printStackTrace();
         }
-        return (2*i+1 < tree.length && tree[2*i+1]!=null);
+        if(2*i+1<this.tree.length){
+            Position<E>[] aux = new Position[(2*this.tree.length+1)*2];
+            for(int j=0;j<this.tree.length;j++){
+                aux[j]=this.tree[j];
+            }
+            this.tree=aux;
+        }
+        return (tree[2*i+1]!=null);
     }
 
     @Override
@@ -117,7 +126,14 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
         } catch (InvalidPositionException e) {
             e.printStackTrace();
         }
-        return (2*i+1 < tree.length && tree[2*i+1]!=null);
+        if(2*i+1<this.tree.length){
+            Position<E>[] aux = new Position[(2*this.tree.length+1)*2];
+            for(int j=0;j<this.tree.length;j++){
+                aux[j]=this.tree[j];
+            }
+            this.tree=aux;
+        }
+        return (tree[2*i+2]!=null);
     }
 
     @Override
@@ -194,7 +210,7 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
                 return this.tree[pos.pos*2+1];
             }
             else{
-                Position<E>[] nuevo = new Position[(pos.pos*2+1)*2];
+                Position<E>[] nuevo = new Position[(pos.pos*2+1)*4];
                 for(int i=0;i<tree.length;i++){
                     nuevo[i]=tree[i];
                 }
@@ -218,7 +234,7 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
                 return this.tree[pos.pos*2+2];
             }
             else{
-                Position<E>[] nuevo = new Position[(pos.pos*2+2)*2];
+                Position<E>[] nuevo = new Position[(pos.pos*2+2)*4];
                 for(int i=0;i<tree.length;i++){
                     nuevo[i]=tree[i];
                 }
@@ -267,38 +283,106 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
 
     @Override
     public void attachLeft(Position<E> h, BinaryTree<E> t1) {
-        throw new UnsupportedOperationException("Not supported yet.");
-        /*
+        if(this.hasLeft(h)) throw new RuntimeException();
+        BTPos<E> node = null;
         try {
-            BTPos<E> pos = checkPosition(h);
-            int indexLeft = pos.pos+2+1;
-            if (indexLeft>= tree.length){
-                Position<E>[] nuevo = new Position[(pos.pos*2+1)*2];
-                for(int i=0;i<tree.length;i++){
-                    nuevo[i]=tree[i];
-                }
-                tree=nuevo;
-            }
-            LinkedList<E> l = new LinkedList<E>();
-            BTPos<E> rt = checkPosition(t1.root());
-
-
-
+            node = checkPosition(h);
         } catch (InvalidPositionException e) {
             e.printStackTrace();
         }
-
-         */
+        Iterator<Position<E>> iterator = new BreadthFirstTreeIterator<>(t1);
+        Queue<Position<E>> nodes = new LinkedList<>();
+        Queue<Position<E>>new_nodes = new LinkedList<>();
+        if(iterator.hasNext()){
+            Position<E> parent = iterator.next();
+            Position<E> p = insertLeft(node, parent.getElement());
+            nodes.add(parent);
+            new_nodes.add(p);
+        }
+        while (iterator.hasNext()&&!nodes.isEmpty()){
+            Position<E> parent = nodes.poll();
+            Position<E> p = new_nodes.poll();
+            if(t1.hasLeft(parent)){
+                Position<E> left = iterator.next();
+                new_nodes.add(insertLeft(p, left.getElement()));
+                nodes.add(left);
+            }
+            if(t1.hasRight(parent)){
+                Position<E> right = iterator.next();
+                new_nodes.add(insertRight(p, right.getElement()));
+                nodes.add(right);
+            }
+        }
     }
 
     @Override
     public void attachRight(Position<E> h, BinaryTree<E> t1) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.hasRight(h)) throw new RuntimeException();
+        BTPos<E> node = null;
+        try {
+            node = checkPosition(h);
+        } catch (InvalidPositionException e) {
+            e.printStackTrace();
+        }
+        Iterator<Position<E>> iterator = new BreadthFirstTreeIterator<>(t1);
+        Queue<Position<E>> nodes = new LinkedList<>();
+        Queue<Position<E>>new_nodes = new LinkedList<>();
+        if(iterator.hasNext()){
+            Position<E> parent = iterator.next();
+            Position<E> p = insertRight(node, parent.getElement());
+            nodes.add(parent);
+            new_nodes.add(p);
+        }
+        while (iterator.hasNext()&&!nodes.isEmpty()){
+            Position<E> parent = nodes.poll();
+            Position<E> p = new_nodes.poll();
+            if(t1.hasLeft(parent)){
+                Position<E> left = iterator.next();
+                new_nodes.add(insertLeft(p, left.getElement()));
+                nodes.add(left);
+            }
+            if(t1.hasRight(parent)){
+                Position<E> right = iterator.next();
+                new_nodes.add(insertRight(p, right.getElement()));
+                nodes.add(right);
+            }
+        }
     }
 
     @Override
     public BinaryTree<E> subTree(Position<E> h) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        BTPos<E> node = null;
+        try {
+            node = checkPosition(h);
+        } catch (InvalidPositionException e) {
+            e.printStackTrace();
+        }
+        ArrayBinaryTree<E> out = new ArrayBinaryTree<>();
+        Iterator<Position<E>> iterator = new BreadthFirstTreeIterator<>(this, node);
+        Queue<Position<E>> nodes = new LinkedList<>();
+        Queue<Position<E>>new_nodes = new LinkedList<>();
+        if(iterator.hasNext()){
+            Position<E> parent = iterator.next();
+            Position<E> p = out.addRoot(parent.getElement());
+            nodes.add(parent);
+            new_nodes.add(p);
+        }
+        while (iterator.hasNext()&&!nodes.isEmpty()){
+            Position<E> parent = nodes.poll();
+            Position<E> p = new_nodes.poll();
+            if(hasLeft(parent)){
+                Position<E> left = iterator.next();
+                new_nodes.add(out.insertLeft(p, left.getElement()));
+                nodes.add(left);
+            }
+            if(hasRight(parent)){
+                Position<E> right = iterator.next();
+                new_nodes.add(out.insertRight(p, right.getElement()));
+                nodes.add(right);
+            }
+        }
+        return out;
     }
 
     @Override
